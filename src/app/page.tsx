@@ -22,9 +22,11 @@ const MegaversePage: React.FC = () => {
     }
   };
 
-  const handleValidateSolution = async () => {
-    const isValid = await megaverseService.validateSolution();
-    alert(isValid ? 'Solution is valid!' : 'Solution validation failed');
+  const handleExecutePhase2 = async () => {
+    const success = await megaverseService.executePhase2();
+    if (success) {
+      alert('Phase 2 completed successfully!');
+    }
   };
 
   return (
@@ -40,7 +42,7 @@ const MegaversePage: React.FC = () => {
       <Controls
         isLoading={megaverseState.isLoading}
         onExecutePhase1={handleExecutePhase1}
-        onValidateSolution={handleValidateSolution}
+        onExecutePhase2={handleExecutePhase2}
       />
 
       {megaverseState.progress.total > 0 && (
