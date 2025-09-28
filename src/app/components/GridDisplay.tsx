@@ -5,6 +5,7 @@ import { CELL_EMOJIS } from '../../util/constants';
 interface GridDisplayProps {
   grid: GridMatrix;
   title: string;
+  className?: string;
 }
 
 export const GridDisplay: React.FC<GridDisplayProps> = ({

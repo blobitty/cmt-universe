@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { createMegaverseService, MegaverseState } from '../util/megaverseService';
 import { ErrorBanner } from './components/ErrorBanner';
-import { Controls } from './components/Controls';
 import { ProgressBar } from './components/ProgressBar';
+import { PhaseContainer } from './components/PhaseContainer';
+import { PHASE1_GOAL_GRID, PHASE2_GOAL_GRID, PHASE1_CODE_SNIPPET, PHASE2_CODE_SNIPPET } from '../util/staticGrids';
 
 const MegaversePage: React.FC = () => {
   const [megaverseState, setMegaverseState] = useState<MegaverseState>({
@@ -30,33 +31,46 @@ const MegaversePage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 font-sans">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-        Crossmint Megaverse Challenge - Phase 1
-      </h1>
+    <div className="min-h-screen bg-black py-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-center text-white mb-12">
+          Crossmint Megaverse Challenge
+        </h1>
 
-      {megaverseState.error && (
-        <ErrorBanner error={megaverseState.error} onDismiss={() => megaverseService.resetError()} />
-      )}
+        {megaverseState.error && (
+          <div className="mb-8">
+            <ErrorBanner error={megaverseState.error} onDismiss={() => megaverseService.resetError()} />
+          </div>
+        )}
 
-      <Controls
-        isLoading={megaverseState.isLoading}
-        onExecutePhase1={handleExecutePhase1}
-        onExecutePhase2={handleExecutePhase2}
-      />
+        {megaverseState.progress.total > 0 && (
+          <div className="mb-8 max-w-2xl mx-auto">
+            <ProgressBar
+              current={megaverseState.progress.completed}
+              total={megaverseState.progress.total}
+            />
+          </div>
+        )}
 
-      {megaverseState.progress.total > 0 && (
-        <div className="mt-8">
-          <ProgressBar
-            current={megaverseState.progress.completed}
-            total={megaverseState.progress.total}
+        <div className="flex flex-col gap-12 items-center">
+          <PhaseContainer
+            phase={1}
+            title="Phase 1: Basic Polyanets"
+            goalGrid={PHASE1_GOAL_GRID}
+            onExecute={handleExecutePhase1}
+            isLoading={megaverseState.isLoading}
+            codeSnippet={PHASE1_CODE_SNIPPET}
+          />
+
+          <PhaseContainer
+            phase={2}
+            title="Phase 2: Complex Megaverse"
+            goalGrid={PHASE2_GOAL_GRID}
+            onExecute={handleExecutePhase2}
+            isLoading={megaverseState.isLoading}
+            codeSnippet={PHASE2_CODE_SNIPPET}
           />
         </div>
-      )}
-
-      <div className="mt-8 text-center text-gray-600">
-        <p>Click Execute Phase 1 to automatically create polyanets based on the goal configuration.</p>
-        <p>Progress will be shown above as each polyanet is created via API calls.</p>
       </div>
     </div>
   );
